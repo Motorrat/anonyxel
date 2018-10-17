@@ -1,5 +1,5 @@
 # anonyxel
-usage: anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN]
+<code> usage: anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN]
                        [-o OUTCOME_COLUMN]
 
 Excel Sheet Data Anonymizer for Machine Learning.
@@ -28,3 +28,4 @@ optional arguments:
                         A 0/1 column that represents the outcome of your cases. Empty cells 
                         represent rows/cases that you want to predict. It will not be anonymized 
                         because we need it in clear text. 
+</code>
