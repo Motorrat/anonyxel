@@ -1,4 +1,3 @@
-#!/home/diego/Documents/DataScience/anonyxel/virtualenv_anonyxel/anonyxel/bin/python3.6
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
 """
