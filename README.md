@@ -1,7 +1,7 @@
 # anonyxel
 <code> usage: anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN]
                        [-o OUTCOME_COLUMN]
-
+</code>
 Excel Sheet Data Anonymizer for Machine Learning.
 
 Takes DATA_FILE.anon.xlsx with ID, Outcome and some data columns 
@@ -15,7 +15,7 @@ The Results are written to DATA_FILE.anon.xlsx.
 An ID map for joining back to the original data is written 
 into DATA_FILE.id_map.xlsx
 
-optional arguments:
+<code> optional arguments:
   -h, --help            show this help message and exit
   -d DATA_FILE, --data_file DATA_FILE
                         Excel File to anonymize with a single worksheet called DATA.
