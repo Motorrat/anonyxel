@@ -1,7 +1,7 @@
 # anonyxel
-<code> usage: anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN]
+<pre> usage: anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN]
                        [-o OUTCOME_COLUMN]
-</code>
+
 Excel Sheet Data Anonymizer for Machine Learning.
 
 Takes DATA_FILE.anon.xlsx with ID, Outcome and some data columns 
@@ -15,7 +15,7 @@ The Results are written to DATA_FILE.anon.xlsx.
 An ID map for joining back to the original data is written 
 into DATA_FILE.id_map.xlsx
 
-<code> optional arguments:
+optional arguments:
   -h, --help            show this help message and exit
   -d DATA_FILE, --data_file DATA_FILE
                         Excel File to anonymize with a single worksheet called DATA.
@@ -28,4 +28,4 @@ into DATA_FILE.id_map.xlsx
                         A 0/1 column that represents the outcome of your cases. Empty cells 
                         represent rows/cases that you want to predict. It will not be anonymized 
                         because we need it in clear text. 
-</code>
+</pre>
