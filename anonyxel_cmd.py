@@ -1,8 +1,9 @@
+#!/home/diego/Documents/DataScience/anonyxel/virtualenv_anonyxel/anonyxel/bin/python3.6
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
 """
 Copyright 2018 Egor Kobylkin
-Created on We 3. Oct 22:51:46 CEST 2018
+Created on We 3. Okt 22:51:46 CEST 2018
 @author: Egor Kobylkin
 BSD 3-Clause "New" or "Revised" License bsd-3-clause
 https://opensource.org/licenses/BSD-3-Clause
@@ -22,9 +23,20 @@ from argparse import RawTextHelpFormatter
 # https://docs.python.org/2/howto/argparse.html
 parser = argparse.ArgumentParser(
 
-description='''Excel Sheet Data Anonymizer for Machine Learning, keeps Outcome(0/1) cleartext, encodes all string into levels, normalizes floats, keeps integers intact.
-Results are written to DATA_FILE.anon.xlsx and DATA_FILE.id_map.xlsx (id map for joining back to the original data)'''
+description='''Excel Sheet Data Anonymizer for Machine Learning.
+
+Takes DATA_FILE.anon.xlsx with ID, Outcome and some data columns 
+in the DATA worksheet. Hashes IDs, keeps Outcome(0/1) cleartext. 
+Numbers(integers) excluding float are first hashed to a string.
+Afterwards all categorical and string columns are encoded into levels. 
+Floats are scaled. 
+
+The Results are written to DATA_FILE.anon.xlsx. 
+
+An ID map for joining back to the original data is written 
+into DATA_FILE.id_map.xlsx'''
 ,formatter_class=RawTextHelpFormatter)
+
 
 parser.add_argument('-d', '--data_file', nargs=1,
 help='Excel File to anonymize with a single worksheet called DATA.'
@@ -33,10 +45,13 @@ parser.add_argument('-w', '--worksheet', nargs=1,
 help='Excel worksheet to use. If omitted we will try to use the DATA worksheet.'
                     )
 parser.add_argument('-i', '--id_column', nargs=1,
-help='A column that represents a Unique ID to identify your cases, must not repeat within the dataset.'
+help='''A column that represents a Unique ID to identify your cases, 
+must not repeat within the dataset.'''
                     )
 parser.add_argument('-o', '--outcome_column', nargs=1,
-help='A 0/1 column that represents the outcome of your cases. Empty cells represent rows/cases that you want to predict. It will not be anonymized because we need it in clear text. '
+help='''A 0/1 column that represents the outcome of your cases. Empty cells 
+represent rows/cases that you want to predict. It will not be anonymized 
+because we need it in clear text. '''
                     )
 
 args = parser.parse_args()
@@ -45,7 +60,8 @@ data_file = ''
 if args.data_file:
     data_file = args.data_file[0]
 else:
-    msg = "A data file is a mandatory parameter! Use -d FILENAME or --data_file FILENAME."
+    msg ='''A data file is a mandatory parameter! Use -d FILENAME or \
+--data_file FILENAME.'''
     print(msg)#logger.error(msg)
     exit(8)
 if (not (os.path.isfile(data_file))):
@@ -83,7 +99,8 @@ try:
 #TODO do something here to select the correct worksheet
     excel_df=dfs[worksheet]
 except:
-    msg = 'Could not read in data from file"' + data_file +'" with "'+worksheet+'" or "DATA" worksheet!'
+    msg = 'Could not read in data from file"' + data_file +'" with "' \
+        +worksheet+'" or "DATA" worksheet!'
     print(msg)#logger.error(msg)
     exit(8)
 
@@ -122,7 +139,8 @@ def hash_to_string(cell_value):
 # numbers(integers) excluding float-> are first hashed to a string,
 # afterwards categorical/string columns are encoded, floats are scaled.
 # TODO add tokenisation for the text cells
-for col in dataframe.select_dtypes(include=[np.number], exclude=[np.float64]).columns:
+for col in dataframe.select_dtypes(include=[np.number]
+    , exclude=[np.float64]).columns:
     dataframe[col] = dataframe[col].map(hash_to_string).astype(np.object)
 
 for col in dataframe.select_dtypes(exclude=[np.number]).columns: 
@@ -130,26 +148,28 @@ for col in dataframe.select_dtypes(exclude=[np.number]).columns:
 
 for col in dataframe.select_dtypes(include=[np.float64]).columns:
     dataframe[col] = pd.DataFrame(preprocessing.scale(dataframe[col].values)
-                                    ,index=dataframe[col].index, columns=[col,])
+                                  ,index=dataframe[col].index, columns=[col,])
 
 # and fill all missing data values with the most frequent value
 dataframe=dataframe.fillna(dataframe.mode().iloc[0])
 
 # rename columns 
-dataframe.columns=[ 'column_'+str(clmn_num) for clmn_num,clmn_name in enumerate(dataframe.columns) ]
+dataframe.columns=[ 'column_'+str(clmn_num) for clmn_num,clmn_name 
+                        in enumerate(dataframe.columns) ]
 
 # construct full dataset but now with hashed IDs  
 dataframe['Hashed_ID']=holdout_df[id_column].map(hash_to_string)
 dataframe['Clear_Outcome']=holdout_df[outcome_column]
 dataframe = dataframe.reindex(['Hashed_ID','Clear_Outcome'] 
-          + list([a for a in dataframe.columns if a not in ['Hashed_ID','Clear_Outcome']]), axis=1)
+          + list([a for a in dataframe.columns if a 
+                    not in ['Hashed_ID','Clear_Outcome']]), axis=1)
 
 ###########################################################
 # Anonymisation done
 ###########################################################
 
 # Now we add the hashed ids to the original ones and build a map.
-# With this map you can track back the results on your side with a VLOOKUP, for instance.
+# With this map you can track back the results on your side with a VLOOKUP.
 # Do_not share (upload) this file outside of your domain.
 ID_map_df=holdout_df[[id_column]]
 ID_map_df['Hashed_ID']=dataframe['Hashed_ID']
@@ -157,18 +177,15 @@ ID_map_df['Hashed_ID']=dataframe['Hashed_ID']
 
 ###########################################################
 # Writing out the results
-###########################################################
+##########################################  #################
 ID_map_df.to_excel(ID_map_filename, index = False)
-dataframe.to_excel(result_filename, sheet_name = "Anonymized_Data", index = False)
+dataframe.to_excel(result_filename, sheet_name = "Anonymized_Data"
+    , index = False)
 #lets writhe out a HDFS store that is expecially easy to process with pandas
-h5container = pd.HDFStore(result_h5_filename) # this is the file cache for the data
+h5container = pd.HDFStore(result_h5_filename) # this is the file cache
 h5container['DATA'] = dataframe
 h5container.close()
 
 
 #with pd.HDFStore(filename, mode='r') as h5container:
 #    dataframe = h5container.select('DATA')
-
-
-
-
