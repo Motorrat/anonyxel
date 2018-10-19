@@ -24,7 +24,7 @@ parser = argparse.ArgumentParser(
 
 description='''Excel Sheet Data Anonymizer for Machine Learning.
 
-Takes DATA_FILE.anon.xlsx with ID, Outcome and some data columns 
+Takes DATA_FILE.xlsx with ID, Outcome and some data columns 
 in the DATA worksheet. Hashes IDs, keeps Outcome(0/1) cleartext. 
 Numbers(integers) excluding float are first hashed to a string.
 Afterwards all categorical and string columns are encoded into levels. 
