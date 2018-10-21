@@ -1,10 +1,10 @@
 
 
 # anonyxel <img src=https://github.com/Motorrat/anonyxel/blob/master/1183632.svg height=64 width=64>
+Excel Sheet Data Anonymizer for Machine Learning. 
 
-<pre> usage: anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN] [-o OUTCOME_COLUMN]
-
-Excel Sheet Data Anonymizer for Machine Learning.
+## Usage:
+<pre> anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN] [-o OUTCOME_COLUMN]
 
 Takes DATA_FILE.xlsx with ID, Outcome and some data columns 
 in the DATA worksheet. 
@@ -40,4 +40,5 @@ optional arguments:
                         because we need it in clear text. 
 </pre>
 
+## Acknowledgments 
 1183632.svg icon from Flaticon https://www.flaticon.com/free-icon/encryption_1183632
