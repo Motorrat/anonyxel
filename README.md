@@ -21,8 +21,6 @@ The Results are written to DATA_FILE.anon.xlsx.
 An ID map for joining back to the original data is written 
 into DATA_FILE.id_map.xlsx
 
-<img src=https://github.com/Motorrat/anonyxel/blob/master/Screenshot-AdultDataset-ID_Map.png>
-
 optional arguments:
   -h, --help            show this help message and exit
   -d DATA_FILE, --data_file DATA_FILE
