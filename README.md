@@ -1,6 +1,6 @@
+<img src=https://github.com/Motorrat/anonyxel/blob/master/1183632.svg height=64 width=64>
 # anonyxel
-<pre> usage: anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN]
-                       [-o OUTCOME_COLUMN]
+<pre> usage: anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN] [-o OUTCOME_COLUMN]
 
 Excel Sheet Data Anonymizer for Machine Learning.
 
@@ -37,3 +37,5 @@ optional arguments:
                         represent rows/cases that you want to predict. It will not be anonymized 
                         because we need it in clear text. 
 </pre>
+
+1183632.svg icon from Flaticon https://www.flaticon.com/free-icon/encryption_1183632
