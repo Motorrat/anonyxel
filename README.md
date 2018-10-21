@@ -5,12 +5,14 @@
 Excel Sheet Data Anonymizer for Machine Learning.
 
 Takes DATA_FILE.xlsx with ID, Outcome and some data columns 
-in the DATA worksheet. Hashes IDs, keeps Outcome(0/1) cleartext. 
+in the DATA worksheet. 
+
+<img src=https://github.com/Motorrat/anonyxel/blob/master/Screenshot-AdultDataset-Original.png>
+
+Hashes IDs, keeps Outcome(0/1) cleartext. 
 Numbers(integers) excluding float are first hashed to a string.
 Afterwards all categorical and string columns are encoded into levels. 
 Floats are scaled. 
-
-<img src=https://github.com/Motorrat/anonyxel/blob/master/Screenshot-AdultDataset-Original.png>
 
 The Results are written to DATA_FILE.anon.xlsx. 
 
