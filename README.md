@@ -10,10 +10,16 @@ Numbers(integers) excluding float are first hashed to a string.
 Afterwards all categorical and string columns are encoded into levels. 
 Floats are scaled. 
 
+<img src=https://github.com/Motorrat/anonyxel/blob/master/Screenshot-AdultDataset-Original.png>
+
 The Results are written to DATA_FILE.anon.xlsx. 
+
+<img src=https://github.com/Motorrat/anonyxel/blob/master/Screenshot-AdultDataset-Anonymized.png>
 
 An ID map for joining back to the original data is written 
 into DATA_FILE.id_map.xlsx
+
+<img src=https://github.com/Motorrat/anonyxel/blob/master/Screenshot-AdultDataset-ID_Map.png>
 
 optional arguments:
   -h, --help            show this help message and exit
