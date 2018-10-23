@@ -132,8 +132,9 @@ def do_upload():
     outcome_column = request.forms.get('outcome_column')
     upload     = request.files.get('upload')
     name, ext = os.path.splitext(upload.filename)
-    if ext not in ('.xlsx','.xls','.csv'):
-        return 'File extension not allowed.'
+    if ext not in ('.xlsx','.xls'):
+        return ('Empty' if not ext else ext) + \
+        ' file extension not allowed. Only .xlsx and .xls are supported.'
     new_name=name+'.anon'+ext
 
     dfs = pd.read_excel(upload.file,sheet_name=None)
