@@ -2,7 +2,8 @@ from bottle import route, request, response, run
 import os, pandas as pd, numpy as np
 from sklearn import preprocessing
 from io import BytesIO
-# sudo pip install xlsxwriter
+# binami sudo pip install pandas xlrd openpyxl sklearn tables xlsxwriter
+# pyhthonanywhere.com pip install --user pandas xlrd openpyxl sklearn tables xlsxwriter
 
 def anonyxel(excel_df,worksheet,id_column,outcome_column):
 ###########################################################
