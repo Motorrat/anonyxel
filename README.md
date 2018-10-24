@@ -5,12 +5,11 @@ Excel Sheet Data Anonymizer for Machine Learning.
 
 
 ## Usage:
-as a commandline tool <pre> anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN] [-o OUTCOME_COLUMN]</pre>
-
 online https://anonyxel.pythonanywhere.com/
 
-<pre>
-Takes DATA_FILE.xlsx with ID, Outcome and some data columns 
+as a commandline tool <pre> anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN] [-o OUTCOME_COLUMN]
+
+Anonyxel takes DATA_FILE.xlsx with ID, Outcome and some data columns 
 in the DATA worksheet. 
 
 <img src=https://github.com/Motorrat/anonyxel/blob/master/Screenshot-AdultDataset-Original.png>
