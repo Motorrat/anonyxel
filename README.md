@@ -2,6 +2,7 @@
 
 # anonyxel <img src=https://github.com/Motorrat/anonyxel/blob/master/1183632.svg height=64 width=64>
 Excel Sheet Data Anonymizer for Machine Learning. 
+Use it online https://anonyxel.pythonanywhere.com/
 
 ## Usage:
 <pre> anonyxel_cmd.py [-h] [-d DATA_FILE] [-w WORKSHEET] [-i ID_COLUMN] [-o OUTCOME_COLUMN]
