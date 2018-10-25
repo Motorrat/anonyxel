@@ -9,7 +9,7 @@ https://opensource.org/licenses/BSD-3-Clause
 """
 
 # python3.6
-#pip install pandas xlrd openpyxl sklearn tables
+#pip install pandas xlrd openpyxl sklearn tables xlwt
 
 import os, argparse, pandas as pd, numpy as np
 from sklearn import preprocessing
