@@ -150,7 +150,7 @@ def do_upload():
     result.to_excel(writer, sheet_name='Anonymized_DATA')
 
     writer.save()
-    response.contet_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    response.content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     attch_str='attachment; filename='+new_name
     response.add_header('Content-Disposition', attch_str)
     return output.getvalue()
