@@ -2,7 +2,7 @@
 # A very simple Bottle Hello World app for you to get started with...
 from bottle import default_app
 
-from bottle import route, request, response, run
+from bottle import route, request, response, get, static_file
 import os, pandas as pd, numpy as np
 from sklearn import preprocessing
 from io import BytesIO
@@ -75,8 +75,48 @@ def anonyxel(excel_df,worksheet,id_column,outcome_column):
 @route('/')
 def login():
     return '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name = "viewport" content = "width = device-width"> <!-- to take all width of the screen -->
 
-<h1>Anonyxel</h1>
+<link rel="apple-touch-icon" sizes="57x57" href="/static/favicons/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/static/favicons/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/static/favicons/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/static/favicons/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/static/favicons/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/static/favicons/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/static/favicons/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/static/favicons/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/static/favicons/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="/static/favicons/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/static/favicons/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/static/favicons/favicon-16x16.png">
+<link rel="manifest" href="/static/favicons/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/static/favicons/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+
+<style media="screen" type="text/css">
+
+h1 {
+ font-size:200%;
+ line-height:1;
+}
+
+
+</style>
+<title>Anonyxel</title></head>
+<body>
+
+
+<h1>anonyxel
+<img src=/static/favicons/android-icon-192x192.png
+alt="anonyxel icon" width="42" height="42" align="top">
+</h1>
+
 <h2>Excel Sheet Data Anonymizer for Machine Learning.</h2>
 
 <form action="/upload" method="post" enctype="multipart/form-data">
@@ -121,12 +161,16 @@ A download should start automatically.
 <p>An ID map for joining back to the original data is written into
 DATA_FILE.id_map.xlsx and sent to you via e-mail. (TODO)
 </p>
+
+<p> An <a href=https://github.com/Motorrat/anonyxel/raw/master/Adult-Dataset-Example.xlsx>example xlsx file</a> you can use for testing</p>
 </i>
 
 <p><a href=https://github.com/Motorrat/anonyxel/blob/master/LICENSE>
 License</a>
-<p><a href=https://github.com/Motorrat/anonyxel>Source Code</a>
+<p><a href=https://github.com/Motorrat/anonyxel>Source Code, Documentation, Acknowledgements etc.</a>
 
+</body>
+</html>
 '''
 
 
@@ -137,7 +181,7 @@ def do_upload():
     outcome_column = request.forms.get('outcome_column')
     upload     = request.files.get('upload')
     name, ext = os.path.splitext(upload.filename)
-    if ext not in ('.xlsx','.xls'):
+    if ext not in ('.xlsx','.xls',):
         return ('Empty' if not ext else ext) + \
         ' file extension not allowed. Only .xlsx and .xls are supported.'
     new_name=name+'.anon'+ext
@@ -154,10 +198,15 @@ def do_upload():
     result.to_excel(writer, sheet_name='Anonymized_DATA')
 
     writer.save()
-    response.contet_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    response.content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     attch_str='attachment; filename='+new_name
     response.add_header('Content-Disposition', attch_str)
     return output.getvalue()
+
+@get("/static/img/<filepath:re:.*\.(jpg|png|gif|ico|svg|json)>")
+def img(filepath):
+    return static_file(filepath, root="static/img")
+
 
 application = default_app()
 
