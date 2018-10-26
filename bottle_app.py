@@ -23,14 +23,17 @@ def anonyxel(excel_df,worksheet,id_column,outcome_column):
     # helper function for hashing strings and integers
     #https://docs.python.org/2/library/hashlib.html
     import hashlib # TODO check what hash function is optimal
-    m = hashlib.blake2b(salt=os.urandom(hashlib.blake2b.SALT_SIZE))
+    salt=os.urandom(hashlib.blake2b.SALT_SIZE)
     def hash_to_string(cell_value):
-            try:
-                    m.update(cell_value.encode('utf8')) # string
-                    return m.hexdigest()
-            except:
-                    m.update(bytes(cell_value)) # integer or float
-                    return m.hexdigest()
+
+        try:
+            m = hashlib.blake2b(salt) # we need to initialize it every time
+            m.update(cell_value.encode('utf8')) # string
+            return m.hexdigest()
+        except:
+            m = hashlib.blake2b(salt) # we need to initialize it every time
+            m.update(bytes(cell_value)) # integer or float
+            return m.hexdigest()
 
     # numbers(integers) excluding float-> are first hashed to a string,
     # afterwards categorical/string columns are encoded, floats are scaled.
@@ -111,7 +114,7 @@ h1 {
 <title>Anonyxel</title></head>
 <body>
 
-
+<span style="color:red"> <em> This is a functional demo for testing purposes! Don't upload sensitive data! </em> </span>
 <h1>anonyxel
 <img src=/static/favicons/android-icon-192x192.png
 alt="anonyxel icon" width="42" height="42" align="top">
@@ -195,7 +198,7 @@ def do_upload():
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
 
-    result.to_excel(writer, sheet_name='Anonymized_DATA')
+    result.to_excel(writer, sheet_name='Anonymized_DATA', index = False)
 
     writer.save()
     response.content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
