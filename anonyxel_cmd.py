@@ -1,3 +1,4 @@
+#!/home/diego/Documents/DataScience/anonyxel/virtualenv_anonyxel/anonyxel/bin/python3.6
 # -*- coding: utf-8 -*-
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
 """
@@ -9,7 +10,9 @@ https://opensource.org/licenses/BSD-3-Clause
 """
 
 # python3.6
-#pip install pandas xlrd openpyxl sklearn tables xlwt
+#pip install pandas xlrd openpyxl sklearn tables
+
+# example source https://archive.ics.uci.edu/ml/datasets/adult
 
 import os, argparse, pandas as pd, numpy as np
 from sklearn import preprocessing
@@ -24,7 +27,7 @@ parser = argparse.ArgumentParser(
 
 description='''Excel Sheet Data Anonymizer for Machine Learning.
 
-Takes DATA_FILE.xlsx with ID, Outcome and some data columns 
+Takes DATA_FILE.anon.xlsx with ID, Outcome and some data columns 
 in the DATA worksheet. Hashes IDs, keeps Outcome(0/1) cleartext. 
 Numbers(integers) excluding float are first hashed to a string.
 Afterwards all categorical and string columns are encoded into levels. 
@@ -126,18 +129,22 @@ dataframe=excel_df.drop(columns=[id_column,outcome_column])
 # helper function for hashing strings and integers
 #https://docs.python.org/2/library/hashlib.html
 import hashlib # TODO check what hash function is optimal
-m = hashlib.blake2b(salt=os.urandom(hashlib.blake2b.SALT_SIZE)) 
+salt=os.urandom(hashlib.blake2b.SALT_SIZE)
 def hash_to_string(cell_value):
+
     try: 
-         m.update(cell_value.encode('utf8')) # string
-         return m.hexdigest()
+        m = hashlib.blake2b(salt) # we need to initialize it every time
+        m.update(cell_value.encode('utf8')) # string
+        return m.hexdigest()
     except:
-         m.update(bytes(cell_value)) # integer or float
-         return m.hexdigest()
+        m = hashlib.blake2b(salt) # we need to initialize it every time
+        m.update(bytes(cell_value)) # integer or float
+        return m.hexdigest()
 
 # numbers(integers) excluding float-> are first hashed to a string,
 # afterwards categorical/string columns are encoded, floats are scaled.
 # TODO add tokenisation for the text cells
+
 for col in dataframe.select_dtypes(include=[np.number]
     , exclude=[np.float64]).columns:
     dataframe[col] = dataframe[col].map(hash_to_string).astype(np.object)
@@ -152,17 +159,20 @@ for col in dataframe.select_dtypes(include=[np.float64]).columns:
 # and fill all missing data values with the most frequent value
 dataframe=dataframe.fillna(dataframe.mode().iloc[0])
 
+grouped=dataframe.groupby(list(dataframe.columns), as_index=False)
+k_anon=min(grouped.size())
+
+print('K-anon = '+str(k_anon)+". https://en.wikipedia.org/wiki/K-anonymity")
+
 # rename columns 
 dataframe.columns=[ 'column_'+str(clmn_num) for clmn_num,clmn_name 
                         in enumerate(dataframe.columns) ]
-
 # construct full dataset but now with hashed IDs  
 dataframe['Hashed_ID']=holdout_df[id_column].map(hash_to_string)
 dataframe['Clear_Outcome']=holdout_df[outcome_column]
 dataframe = dataframe.reindex(['Hashed_ID','Clear_Outcome'] 
           + list([a for a in dataframe.columns if a 
                     not in ['Hashed_ID','Clear_Outcome']]), axis=1)
-
 ###########################################################
 # Anonymisation done
 ###########################################################
@@ -178,7 +188,7 @@ ID_map_df['Hashed_ID']=dataframe['Hashed_ID']
 # Writing out the results
 ##########################################  #################
 ID_map_df.to_excel(ID_map_filename, index = False)
-dataframe.to_excel(result_filename, sheet_name = "Anonymized_Data"
+dataframe.to_excel(result_filename, sheet_name = "Anonymized_Data_"
     , index = False)
 #lets writhe out a HDFS store that is expecially easy to process with pandas
 h5container = pd.HDFStore(result_h5_filename) # this is the file cache
@@ -188,3 +198,8 @@ h5container.close()
 
 #with pd.HDFStore(filename, mode='r') as h5container:
 #    dataframe = h5container.select('DATA')
+
+
+
+
+
